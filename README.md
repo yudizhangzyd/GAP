@@ -20,9 +20,9 @@ Functions
 
 The package contains the following functions.
 
-### call_aln
+## call_aln
 
-`call_aln` Prepare data for `altraphase`.
+`call_aln` prepares data for our main function `altraphase`.
 
 #### Input (required):
 		
@@ -72,7 +72,7 @@ uni_geno_file <- system.file("extdata", "uni.fa", package = "GAP")
 call_aln(ref_nameA = "Genome_A:0-1000", ref_nameB = "Genome_B:0-1000", ref_fsa = alignment, ref_sam = ref_sam, alnA = alnA, alnB = alnB, out_file = out_file, uni_geno_file = uni_geno_file)
 ```
    
-### altraphase
+## altraphase
 
 `altraphase` main function for genotyping and phasing alleotetraploid individual. It takes the output of `call_aln` and returns a list contain the phased haplotypes, SNPs and SNP locations and other auxiliary values.
 
