@@ -26,7 +26,7 @@ altraphase(
 
 \item{formula}{Formula pass to `mnlogit`}
 
-\item{max_iter}{Iteration in HMM. Default:100}
+\item{max_iter}{Iteration in HMM. Default:20}
 
 \item{seed}{Set seed. Default:0}
 

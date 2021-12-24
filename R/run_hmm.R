@@ -54,7 +54,7 @@ getOpt <- function(option = NULL) {
 #' @param res_file Output the results in a file. Default: NULL
 #' @param seed Set seed. Default:0
 #' @param tol Convergence tolerance. Default:1e-05
-#' @param max_iter Iteration in HMM. Default:100
+#' @param max_iter Iteration in HMM. Default:20
 #' @param ncores Cores to use when calling `mnlogit`
 #' @param verbose Print process. Default: FALSE
 #' @param formula Formula pass to `mnlogit`
