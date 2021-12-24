@@ -6,14 +6,12 @@ Installation
 `GAP` can be installed from the GitHub repository using the devtools package.
 
 ``` r
-# Installs CClust
 devtools::install_github("yudizhangzyd/GAP")
 ```
 
 Once installed, the package can be loaded as usual.
 
 ``` r
-# Loads the library
 library(GAP)
 ```
 
