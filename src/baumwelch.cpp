@@ -581,7 +581,7 @@ List get_overlap(Nullable<List> del_, Nullable<List> coverage_,  Nullable<List> 
   return(overlap);
 }
 
-
+// find all the possible hidden states and haplotypes
 // [[Rcpp::export]]
 List full_hap_new (List hmm_info, IntegerMatrix linkage_info, List overlap_info, unsigned int hap_length,
                    int hap_min_pos, unsigned int use_MC = 0, unsigned int db_heter = 0) {

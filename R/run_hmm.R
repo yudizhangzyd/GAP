@@ -1,18 +1,18 @@
 opts <- new.env()
-assign("majority", 0.9, envir = opts)
-assign("cut_off", 0, envir = opts)
-assign("three_hap", 0.62, envir = opts)
-assign("third_nuc", 0, envir = opts)
-assign("two_hap", 0.45, envir = opts)
-assign("left_range", 1.2, envir = opts)
+assign("majority", 0.9, envir = opts) # filter nuc below than 10%
+assign("cut_off", 0, envir = opts)  # not used...
+assign("three_hap", 0.62, envir = opts) # if major nuc/minor nuc = 0.62, then allelic SNP could exist
+assign("third_nuc", 0, envir = opts) # do not allow there is a third nuc
+assign("two_hap", 0.45, envir = opts) #condition to rule out 3 possible nucs, but not used in current implementation
+assign("left_range", 1.2, envir = opts)# same as above
 assign("emprical", 1, envir = opts)
-assign("sampling", 0, envir = opts)
-assign("n_sample", 10, envir = opts)
-assign("lower_ab", 0.95, envir = opts)
-assign("single", 0, envir = opts)
-assign("no_emi_update", 1, envir = opts)
-assign("dbheter", 0, envir = opts)
-assign("db_penal", 0.5, envir = opts)
+assign("sampling", 0, envir = opts)# sample hidden haplotypes, not used
+assign("n_sample", 10, envir = opts)# no. of iterations for sampling
+assign("lower_ab", 0.95, envir = opts)#lower bound when use sampling, not used
+assign("single", 0, envir = opts)# used for dereplicate states, AATT and TTAA are the same when it is a starting haplotype block
+assign("no_emi_update", 1, envir = opts) # do nor update emission estimation
+assign("dbheter", 0, envir = opts) # allow double allelic
+assign("db_penal", 0.5, envir = opts)  # penalty for double allelic sites
 
 setOpt <- function(...) {
   opts <- getOpt()
