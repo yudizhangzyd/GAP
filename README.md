@@ -3,6 +3,8 @@
 Installation
 ------------
 
+Our package calls function from [mnlogit](https://www.rdocumentation.org/packages/mnlogit/versions/1.2.6/topics/mnlogit), please install it first.
+
 `GAP` can be installed from the GitHub repository using the devtools package.
 
 ``` r
