@@ -108,6 +108,10 @@ altraphase <- function(datafile = NULL, alignment = NULL, res_file = NULL,
                                uni_alignment = universal, opt = opts)
   HMM <- append(HMM, pre_hs)
   rm(pre_hs)
+  if (length(HMM$db_loci) == 0)
+    opts$dbheter = 0
+  if (max(HMM$num_states) > 10000)
+    stop("Sorry, hidden space too large, the current version cannot handle this.")
   ########################## baum-welch (iterate until converge)
 
   ## initialization
@@ -209,7 +213,6 @@ altraphase <- function(datafile = NULL, alignment = NULL, res_file = NULL,
   if(opts$dbheter)
     trans_constraint <- trans_const(overlap_info = overlap_info, combination = hap_full_info$combination,
                                     db_sites = HMM$db_loci, num_states = HMM$num_states, t_max = HMM$t_max)
-
   ### start initializing
   ## initialize hap
   dat_info$nuc <- original_nuc

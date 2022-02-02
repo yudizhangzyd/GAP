@@ -1342,8 +1342,8 @@ List trans_const(List overlap_info, List combination, IntegerVector db_sites,
               trans(0, m) = 1;
               break;
             }
-            trans_const(t) = trans;
-            continue;
+      trans_const(t) = trans;
+      continue;
     }
 
     IntegerMatrix comb_t1 = combination[t - 1];
