@@ -217,7 +217,6 @@ int make_alignment(options opt) {
 #endif
     }
 
-
     /* hash sam file to reference (use n_se since some references are repeated in the targted sam file) */
     hash_sam(sds[j], &by_name[j], HASH_REFERENCE, my_refs[j], rf_info->ref_sam->n_se,
              opt.drop_unmapped, opt.drop_secondary,
@@ -234,10 +233,6 @@ int make_alignment(options opt) {
 #ifdef STANDALONE
   printf("total picked reads %lu\n", total_read);
 #endif
-
-  // output selected reads
-  if (opt.selected_fq)
-    output_selected_reads(opt.selected_fq, sds, mh);
 
   // oh well, this is 0-based, so plus 1 to match with what the rest related code designed for
   sam_entry *fse = &rf_info->ref_sam->se[my_refs[0]];
@@ -319,8 +314,10 @@ int make_alignment(options opt) {
     sam_entry *se;
 
     // only mapped to one reference, adjust the alignment to universal
-    if (me->nfiles != N_FILES)
+    if (me->nfiles != N_FILES) {
+      me->exclude = 1;
       continue;
+    }
 
     /* force one alignment per sub-genome */
     double max_ll = -INFINITY;
@@ -333,6 +330,7 @@ int make_alignment(options opt) {
                  "Read %u aligns twice in genome %s.\n",
                  sds[j]->se[me->indices[j][0]].name_s, j);
 #endif
+        me->exclude = 1;
         break;
       }
 
@@ -351,22 +349,42 @@ int make_alignment(options opt) {
         real_id = real_id_B;
       }
 #ifdef STANDALONE
-      printf("%s is ajusted\n", se->name_s);
+      printf("%s is adjusted\n", se->name_s);
 #endif
-      adjust_alignment(se, &fdr->reads[rf_id], strand_genome, id_uni, fdr->n_lengths[A_id], real_id);
+      int exclude = adjust_alignment(se, &fdr->reads[rf_id], strand_genome, id_uni, fdr->n_lengths[A_id], real_id);
+      if (exclude) {
+        me->exclude = 1;
+        break;
+      }
+
+      // if the same, then ramdom sample
       if (max_ll < se->ll_aln) {
         max_ll = se->ll_aln;
         max_id = j;
+      }
+      else if (max_ll == se->ll_aln) {
+        double which_ref = rand() / (RAND_MAX + 1.);
+        if (which_ref <= 0.5)
+          max_id = j;
       }
     }
 #ifdef STANDALONE
     printf("choose %d\n", max_id);
 #endif
+
+    if (me->exclude == 1)
+      continue;
+
     se = &sds[max_id]->se[me->indices[max_id][0]];
     // output the needed format
     output_data(fp, se, n_read);
     n_read++;
   }
+
+  // output selected reads
+  if (opt.selected_fq)
+    output_selected_reads(opt.selected_fq, sds, mh);
+
 #ifdef STANDALONE
   printf("read: %d\n", n_read);
 #endif
