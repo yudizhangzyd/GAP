@@ -251,9 +251,9 @@ int make_alignment(options opt) {
 #ifdef STANDALONE
     printf("Genome B is reverse complemented\n");
 #endif
-    real_id_B[0] = re->end_B;
-    if (fse->cig->ashes[fse->cig->n_ashes - 1].type == CIGAR_SOFT_CLIP || fse->cig->ashes[fse->cig->n_ashes - 1].type == CIGAR_HARD_CLIP)
-      real_id_B[0] -= fse->cig->ashes[fse->cig->n_ashes - 1].len;
+    real_id_B[0] = re->end_B - 1;
+    if (fse->cig->ashes[0].type == CIGAR_SOFT_CLIP || fse->cig->ashes[0].type == CIGAR_HARD_CLIP)
+      real_id_B[0] -= fse->cig->ashes[0].len;
   } else {
     real_id_B[0] = re->start_B;
     if (fse->cig->ashes[0].type == CIGAR_SOFT_CLIP || fse->cig->ashes[0].type == CIGAR_HARD_CLIP)
