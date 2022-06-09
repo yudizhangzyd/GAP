@@ -398,16 +398,16 @@ DataFrame format_data(List dat_info, IntegerMatrix haplotype, int time_pos = -1)
       if (r_obs[k + MLOGIT_CLASS * NUM_CLASS * i] == obs[i])
         mode[k + MLOGIT_CLASS * NUM_CLASS * i] = 1;
 
-      DataFrame df_new = DataFrame::create(
-        Named("id") = id,
-        Named("mode") = mode,
-        Named("read_pos") = r_read_pos,
-        Named("ref_pos") = r_ref_pos,
-        Named("qua") = r_qua,
-        Named("nuc") = r_obs,
-        Named("hap_nuc") = r_hap_nuc);
+  DataFrame df_new = DataFrame::create(
+    Named("id") = id,
+    Named("mode") = mode,
+    Named("read_pos") = r_read_pos,
+    Named("ref_pos") = r_ref_pos,
+    Named("qua") = r_qua,
+    Named("nuc") = r_obs,
+    Named("hap_nuc") = r_hap_nuc);
 
-      return(df_new);
+  return(df_new);
 }
 
 // [[Rcpp::export]]
@@ -523,91 +523,91 @@ List hmm_info(List dat_info, CharacterVector uni_alignment,
           }
         }
 
-        if(non_del == 1) {
-          record_cov[cov_count++] = ref_j;
-          //record the min and the max index that covered by one nuc, exclude them when compare with other algorithms
-          Rcout << "site " << ref_j;
-          Rcout << " is covered by 1 read \n";
-          // n_row[j] = 1;
-          // IntegerVector tmp = {nuc_j[0], nuc_j[0], nuc_j[0], nuc_j[0]};
-          // haplotype(j) = tmp;
-          nuc_unique[j] = nuc_j[0];
-          nuc_count[j] = 1;
-          continue;
-        }
+      if(non_del == 1) {
+        record_cov[cov_count++] = ref_j;
+        //record the min and the max index that covered by one nuc, exclude them when compare with other algorithms
+        Rcout << "site " << ref_j;
+        Rcout << " is covered by 1 read \n";
+        // n_row[j] = 1;
+        // IntegerVector tmp = {nuc_j[0], nuc_j[0], nuc_j[0], nuc_j[0]};
+        // haplotype(j) = tmp;
+        nuc_unique[j] = nuc_j[0];
+        nuc_count[j] = 1;
+        continue;
+      }
 
-        // Rcout << j << ":\t" << non_del<< ":" << count<<"\t" << qua_min<<  "\n";
-        IntegerVector tmp(count);
-        IntegerVector tmp_nuc;
-        // if there are only two reads covered and only keep the one with the highest prob
-        if(non_del == 2) {
-          record_cov[cov_count++] = ref_j;
-          int max_qua = 0;
-          int keep_id = 0;
-          if(nuc_j[0] == nuc_j[1])
-            keep_id = 0;
-          else {
-            for(i = 0; i < count; ++i)
-              if(nuc_j[i] != -1)
-                if(qua_ij[i] >= max_qua) {
-                  max_qua = qua_ij[i];
-                  keep_id = i;
-                }
-          }
-          Rcout << "site " << ref_j;
-          Rcout << " is covered by 2 reads \n";
-          // n_row[j] = 1;
-          // IntegerVector tmp = {nuc_j[keep_id], nuc_j[keep_id], nuc_j[keep_id], nuc_j[keep_id]};
-          // haplotype(j) = tmp;
-          nuc_unique[j] = nuc_j[keep_id];
-          nuc_count[j] = 1;
-          continue;
-        }
-        // remove the ones with the lowest quality score
-        if (qua_min < QUA_ERR && non_del > 1) {
-          IntegerVector ind_que(count);
+      // Rcout << j << ":\t" << non_del<< ":" << count<<"\t" << qua_min<<  "\n";
+      IntegerVector tmp(count);
+      IntegerVector tmp_nuc;
+      // if there are only two reads covered and only keep the one with the highest prob
+      if(non_del == 2) {
+        record_cov[cov_count++] = ref_j;
+        int max_qua = 0;
+        int keep_id = 0;
+        if(nuc_j[0] == nuc_j[1])
+          keep_id = 0;
+        else {
           for(i = 0; i < count; ++i)
-            if(qua_ij[i] == qua_min)
-              ind_que[i] = 1;
-            // Rcout << ind_que << "\n";
-            int enu = 0;
-            for(i = 0; i < count; ++i)
-              if(!ind_que[i])
-                tmp[enu++] = nuc_j[i];
-              if(enu == 0)
-                tmp_nuc = nuc_j[Range(0, count - 1)];
-              else
-                tmp_nuc = tmp[Range(0, enu - 1)];
-        } else
-          tmp_nuc = nuc_j[Range(0, count - 1)];
-        // Rcout << tmp_nuc << "\n";
-        // /* skip the noncovered site */
-        // if(count == 0)
-        //   continue;
-        /* get the nuc table at each site */
-        // Rcout << j << "\n";
-        nuc = unique_map(tmp_nuc);
-        IntegerVector key = nuc["values"];
-        IntegerVector val = nuc["lengths"];
-        num = 0;
-
-        /* remove some unlikely occurred nuc (notice the situation that only - appears) */
-        if(cut_off != 0) {
-          for(t = 0; t < val.length(); ++t)
-            if(val[t] >= prop(j)) {
-              keys(num) = key(t);
-              vals(num++) = val(t);
-            }
-            nuc_unique[j] = keys[Range(0, num - 1)];
-            nuc_count[j] = vals[Range(0, num - 1)];
-        } else {
-          num = key.size();
-          nuc_unique[j] = key;
-          nuc_count[j] = val;
+            if(nuc_j[i] != -1)
+              if(qua_ij[i] >= max_qua) {
+                max_qua = qua_ij[i];
+                keep_id = i;
+              }
         }
+        Rcout << "site " << ref_j;
+        Rcout << " is covered by 2 reads \n";
+        // n_row[j] = 1;
+        // IntegerVector tmp = {nuc_j[keep_id], nuc_j[keep_id], nuc_j[keep_id], nuc_j[keep_id]};
+        // haplotype(j) = tmp;
+        nuc_unique[j] = nuc_j[keep_id];
+        nuc_count[j] = 1;
+        continue;
+      }
+        // remove the ones with the lowest quality score
+      if (qua_min < QUA_ERR && non_del > 1) {
+        IntegerVector ind_que(count);
+        for(i = 0; i < count; ++i)
+          if(qua_ij[i] == qua_min)
+            ind_que[i] = 1;
+          // Rcout << ind_que << "\n";
+          int enu = 0;
+          for(i = 0; i < count; ++i)
+            if(!ind_que[i])
+              tmp[enu++] = nuc_j[i];
+            if(enu == 0)
+              tmp_nuc = nuc_j[Range(0, count - 1)];
+            else
+              tmp_nuc = tmp[Range(0, enu - 1)];
+      } else
+        tmp_nuc = nuc_j[Range(0, count - 1)];
+      // Rcout << tmp_nuc << "\n";
+      // /* skip the noncovered site */
+      // if(count == 0)
+      //   continue;
+      /* get the nuc table at each site */
+      // Rcout << j << "\n";
+      nuc = unique_map(tmp_nuc);
+      IntegerVector key = nuc["values"];
+      IntegerVector val = nuc["lengths"];
+      num = 0;
 
-        IntegerVector hap_site = nuc_unique[j];
-        IntegerVector sum_site = nuc_count[j]; // if there are three and minor are the same amount, order the minor two by the quality score, and eliminate the bad one
+      /* remove some unlikely occurred nuc (notice the situation that only - appears) */
+      if(cut_off != 0) {
+        for(t = 0; t < val.length(); ++t)
+          if(val[t] >= prop(j)) {
+            keys(num) = key(t);
+            vals(num++) = val(t);
+          }
+          nuc_unique[j] = keys[Range(0, num - 1)];
+          nuc_count[j] = vals[Range(0, num - 1)];
+      } else {
+        num = key.size();
+        nuc_unique[j] = key;
+        nuc_count[j] = val;
+      }
+
+      IntegerVector hap_site = nuc_unique[j];
+      IntegerVector sum_site = nuc_count[j]; // if there are three and minor are the same amount, order the minor two by the quality score, and eliminate the bad one
     }
   }
   IntegerVector record;
