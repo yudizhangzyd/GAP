@@ -68,7 +68,7 @@ List aux_noN_S2(IntegerVector sum_site, IntegerVector hap_site,
   int dbheter = opt["dbheter"];
   // if one nuc appears 90% or one nuc appears only once
   if(!sampling && !single) {
-    if (((sum - sum_site[max_id]) == 1 && sum > 4) || (sum_site[max_id]/sum > majority)) {
+    if (((sum - sum_site[max_id]) == 1 && sum > 4) || (sum_site[max_id]/sum >= majority)) {
       n_row = 1;
       IntegerVector temp = {hap_site[max_id], hap_site[max_id], hap_site[max_id], hap_site[max_id]};
       ls["temp"] = temp;
