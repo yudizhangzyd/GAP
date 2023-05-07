@@ -1,7 +1,7 @@
 opts <- new.env()
 assign("majority", 0.9, envir = opts) # filter nuc below than 10%
 assign("cut_off", 0, envir = opts)  # not used...
-assign("three_hap", 0.62, envir = opts) # if major nuc/minor nuc = 0.62, then allelic SNP could exist
+assign("three_hap", 0.55, envir = opts) # if major nuc/minor nuc > three_hap, then allelic SNP could exist
 assign("third_nuc", 0, envir = opts) # do not allow there is a third nuc
 assign("two_hap", 0.45, envir = opts) #condition to rule out 3 possible nucs, but not used in current implementation
 assign("left_range", 1.2, envir = opts)# same as above

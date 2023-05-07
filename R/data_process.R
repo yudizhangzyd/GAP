@@ -10,7 +10,8 @@ to_xy_r <- function(x) {
 compare_par <- function(new, old, name, tol) {
   mapply(FUN = function(A, B) {
     abs(exp(A) - exp(B)) < tol
-  }, A = new[[name]], B = old[[name]]) %>% flatten_lgl()
+  }, A = new[[name]], B = old[[name]])
+  # %>% flatten_lgl()
 }
 
 remove_deletion <- function(de, hmm, overlap, hap) {
