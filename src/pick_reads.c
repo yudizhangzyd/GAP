@@ -32,6 +32,7 @@ void make_options(options_rf *opt)
   }
   opt->extracted_rf[0] = "ref_A.fasta";
   opt->extracted_rf[1] = "ref_B.fasta";
+  opt->qual_filter = 12;
   opt->fastq_file = NULL;
 
 } /* make_options */
@@ -750,7 +751,7 @@ int adjust_alignment(sam_entry *se, data_t *ref, unsigned int strand, int *id_un
     return 0;
 }
 
-void output_data(FILE *fp, sam_entry *se, unsigned int id) {
+void output_data(FILE *fp, sam_entry *se, unsigned int id, options_rf *opt) {
   for (unsigned int i = 0; i < se->aln_len; ++i) {
     fprintf(fp, "%d ", id);
     if (se->uni_aln[i] == 4 && i != 0) {
@@ -764,8 +765,13 @@ void output_data(FILE *fp, sam_entry *se, unsigned int id) {
     fprintf(fp, "%lu ", se->new_pos + i);
     if (se->uni_aln[i] == 4) {
       fprintf(fp, "-1 -\n");
-    } else
-      fprintf(fp, "%d %c\n", get_qual(se->qual, se->rd_map[i]), xy_to_char[se->uni_aln[i]]);
+    } else {
+      data_t qual = get_qual(se->qual, se->rd_map[i]);
+      if (qual < opt->qual_filter)
+        fprintf(fp, "-1 -\n");
+      else
+        fprintf(fp, "%d %c\n", qual, xy_to_char[se->uni_aln[i]]);
+    }
   }
 }
 

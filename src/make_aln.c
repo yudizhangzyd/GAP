@@ -377,7 +377,7 @@ int make_alignment(options opt) {
 
     se = &sds[max_id]->se[me->indices[max_id][0]];
     // output the needed format
-    output_data(fp, se, n_read);
+    output_data(fp, se, n_read, &opt_rf);
     n_read++;
   }
 

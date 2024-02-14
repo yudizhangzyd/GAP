@@ -270,6 +270,7 @@ altraphase <- function(datafile = NULL, alignment = NULL, res_file = NULL,
       par$beta <- tmp$par$beta
       update = 0
     }
+    cat("end!\n")
     ## estimation other parameters
     dat_info$nuc <- mutated_nuc
     bw <- baum_welch_iter(hmm_info = HMM, par_hmm = bw, data_info = dat_info, hap_info = hap_full,
