@@ -8,7 +8,7 @@ Our package calls function from [mnlogit](https://www.rdocumentation.org/package
 `GAP` can be installed from the GitHub repository using the devtools package.
 
 ``` r
-devtools::install_github("yudizhangzyd/GAP")
+devtools::install_github("GAP")
 ```
 
 Once installed, the package can be loaded as usual.
